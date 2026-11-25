@@ -1,0 +1,9 @@
+{
+  "name": "struckduck-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "build:preview": "node build.mjs --fixture"
+  }
+}

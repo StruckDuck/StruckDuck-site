@@ -1,0 +1,80 @@
+[
+  {
+    "slug": "doppulator",
+    "status": "published",
+    "type": "Trick",
+    "format": "App",
+    "title": "Doppulator",
+    "descriptor": "Clones your phone's calculator from screenshots.",
+    "price": "FREE BETA",
+    "buttonText": "Open web app",
+    "buttonUrl": "",
+    "description": ["[Longer description. What it is and what it does.]", "[How you use it, what you need, and anything a magician should know before trying it.]"],
+    "media": []
+  },
+  {
+    "slug": "faro-lab",
+    "status": "published",
+    "type": "Tool",
+    "format": "App",
+    "title": "Faro Lab",
+    "descriptor": "Works out where cards must start in the deck to land at chosen positions after In and Out Faro shuffles.",
+    "price": "[FREE / PRICE]",
+    "buttonText": "Open web app",
+    "buttonUrl": "",
+    "description": ["[Longer description. What it is and what it does.]"],
+    "media": []
+  },
+  {
+    "slug": "illusion-art-print",
+    "status": "published",
+    "type": "Amusement",
+    "format": "3D print",
+    "title": "[Illusion art print]",
+    "descriptor": "[One plain sentence about what it is.]",
+    "price": "[FREE / PRICE]",
+    "buttonText": "Get it on Cults3D",
+    "buttonUrl": "",
+    "description": ["[Longer description. What it is and what it does.]"],
+    "media": []
+  },
+  {
+    "slug": "the-eye-knows-all",
+    "status": "published",
+    "type": "Trick",
+    "format": "App",
+    "title": "The Eye Knows All",
+    "descriptor": "[One plain sentence about what it does.]",
+    "price": "[FREE / PRICE]",
+    "buttonText": "Open web app",
+    "buttonUrl": "",
+    "description": ["[Longer description. What it is and what it does.]"],
+    "media": []
+  },
+  {
+    "slug": "magic-prop-print",
+    "status": "published",
+    "type": "Trick",
+    "format": "3D print",
+    "title": "[Magic prop print]",
+    "descriptor": "[One plain sentence about what it is and how it's used.]",
+    "price": "[FREE / PRICE]",
+    "buttonText": "Get it on Cults3D",
+    "buttonUrl": "",
+    "description": ["[Longer description. What it is and what it does.]"],
+    "media": []
+  },
+  {
+    "slug": "tablside",
+    "status": "published",
+    "type": "Tool",
+    "format": "App",
+    "title": "TablSide",
+    "descriptor": "A web app for consent-based tableside magic requests at venues.",
+    "price": "[FREE / PRICE]",
+    "buttonText": "Open web app",
+    "buttonUrl": "",
+    "description": ["[Longer description. What it is and what it does.]"],
+    "media": []
+  }
+]

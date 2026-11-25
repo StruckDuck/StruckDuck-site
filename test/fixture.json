@@ -1,0 +1,20 @@
+[
+  {
+    "slug": "sample-gallery",
+    "status": "published",
+    "type": "Amusement",
+    "format": "3D print",
+    "title": "Sample gallery (preview only)",
+    "descriptor": "Shows how a listing with several images and a video looks.",
+    "price": "FREE",
+    "buttonText": "Get it on Cults3D",
+    "buttonUrl": "https://example.com/",
+    "description": ["This listing exists only in the preview build, to show the gallery.", "Click the thumbnails to switch between the images and the video."],
+    "media": [
+      {"kind": "image", "src": "/img/sample/sample-1.svg", "alt": "Sample image 1"},
+      {"kind": "image", "src": "/img/sample/sample-2.svg", "alt": "Sample image 2"},
+      {"kind": "youtube", "id": "jNQXAC9IVRw", "alt": "Sample video"},
+      {"kind": "image", "src": "/img/sample/sample-3.svg", "alt": "Sample image 3"}
+    ]
+  }
+]
