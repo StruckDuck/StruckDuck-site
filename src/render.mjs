@@ -134,7 +134,6 @@ export function renderHome(listings, site) {
   <div class="hero-inner">
     <div class="hero-text">
       <h1 class="serif">Tools, tricks,<br>and amusements<br>for magicians.</h1>
-      <p class="hero-sub serif">My personal projects made<br>public for little to no cost.</p>
     </div>
     <img class="hero-art" src="/img/hero.webp" alt="A hand holding a wooden impossible triangle" width="317" height="475">
   </div>

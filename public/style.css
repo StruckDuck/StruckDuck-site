@@ -90,7 +90,6 @@ button { font: inherit; color: inherit; }
 }
 .hero-text { display: flex; flex-direction: column; gap: clamp(20px, 4.4vw, 56px); min-width: 0; }
 .hero h1 { font-size: clamp(38px, 5vw, 64px); line-height: 1.22; white-space: nowrap; }
-.hero-sub { font-size: clamp(19px, 2.5vw, 32px); line-height: 1.33; white-space: nowrap; }
 .hero-art { height: clamp(300px, 37vw, 475px); width: auto; flex: 0 0 auto; }
 .scroll-cue {
   position: absolute;
@@ -316,7 +315,6 @@ button { font: inherit; color: inherit; }
   }
   .hero-text { gap: 20px; }
   .hero h1 { font-size: 38px; line-height: 46px; }
-  .hero-sub { font-size: 19px; line-height: 26px; }
   .hero-art { height: 300px; align-self: center; margin-top: 12px; }
   .scroll-cue { display: none; }
 
