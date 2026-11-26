@@ -1,13 +1,14 @@
 import { shell } from '../../_lib/html.js';
 import { TYPES, getListing, insertListing, updateListing, readForm } from '../../_lib/db.js';
 import { esc } from '../../../src/render.mjs';
+import { uploadedKeys, deleteUploads } from '../../_lib/uploads.js';
 
 const radio = (name, value, checked, id) =>
   `<label class="pillopt"><input type="radio" name="${name}" value="${esc(value)}"${id ? ` id="${id}"` : ''}${checked ? ' checked' : ''}><span>${esc(value)}</span></label>`;
 
 function mediaItem(m) {
   const src = m.kind === 'youtube' ? `https://i.ytimg.com/vi/${m.id}/hqdefault.jpg` : m.src;
-  return `<div class="mi"><img src="${esc(src)}" alt="">${m.kind === 'youtube' ? '<span class="yt">VIDEO</span>' : ''}<label><input type="checkbox" name="keep" value="${esc(JSON.stringify(m))}" checked> Keep</label></div>`;
+  return `<div class="mi"><img src="${esc(src)}" alt=""><span class="cover-tag">COVER</span>${m.kind === 'youtube' ? '<span class="yt">VIDEO</span>' : ''}<span class="mv"><button type="button" data-move="-1" aria-label="Move earlier">←</button><button type="button" data-move="1" aria-label="Move later">→</button></span><label><input type="checkbox" name="keep" value="${esc(JSON.stringify(m))}" checked> Keep</label></div>`;
 }
 
 function formPage(l, { isNew, errors = [], notice = '', status = 200 }) {
@@ -47,9 +48,11 @@ ${errors.length ? `<div class="problems"><b>Not saved yet</b><ul>${errors.map((e
    <div class="f"><label for="description">Description</label><textarea id="description" name="description" rows="9" placeholder="[Longer description. What it is, how it works, and how you use it.]">${esc((l.description || []).join('\n\n'))}</textarea><span class="hint">Leave a blank line between paragraphs.</span></div>
   </section>
   <section class="sec"><h2>Gallery</h2>
-   ${(l.media || []).length ? `<div class="media">${l.media.map(mediaItem).join('')}</div><span class="hint">The first item is the cover. Uncheck Keep to remove one.</span>` : '<span class="hint">No images or videos yet.</span>'}
+   <div class="media" data-media>${(l.media || []).map(mediaItem).join('')}</div>
+   <span class="hint" data-empty-hint${(l.media || []).length ? ' hidden' : ''}>No images or videos yet.</span>
+   <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><button type="button" class="btn-line" data-add-images>+ Images</button><input type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple hidden data-file><span class="hint" data-upload-status role="status"></span></div>
+   <span class="hint">The first item is the cover. Use the arrows to reorder. Uncheck Keep to remove one. Images are saved when you press Save or Publish.</span>
    <div class="f"><label for="addYoutube">Add YouTube videos</label><textarea id="addYoutube" name="addYoutube" rows="2" placeholder="Paste a YouTube link (one per line)"></textarea></div>
-   <span class="hint">Image uploads are coming in the next step.</span>
   </section>
  </div>
  <aside class="side">
@@ -95,6 +98,8 @@ export async function onRequestPost({ params, request, env }) {
     catch { return formPage({ ...listing, status: 'draft' }, { isNew, errors: ['That page address is already used. Pick a different one.'], status: 422 }); }
   } else {
     await updateListing(env, listing);
+    const kept = new Set(uploadedKeys(listing.media));
+    await deleteUploads(env, uploadedKeys(existing.media).filter((k) => !kept.has(k)));
   }
   return new Response(null, { status: 303, headers: { Location: `/admin/listing/${listing.slug}?saved=1` } });
 }
