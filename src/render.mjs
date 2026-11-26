@@ -35,7 +35,7 @@ export function layout({ title, description, body }) {
 <meta name="description" content="${esc(description)}">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(description)}">
-<meta name="theme-color" content="#014D5A">
+<meta name="theme-color" content="#00272E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
@@ -51,7 +51,7 @@ ${body}
 
 function header() {
   return `<header class="site-header">
-  <a href="/" class="brand"><img src="/img/wordmark.png" alt="StruckDuck" width="243" height="36"></a>
+  <a href="/" class="brand" aria-label="StruckDuck home"><img class="brand-foot" src="/img/foot-logo.png" alt="" width="36" height="56"><img src="/img/wordmark.png" alt="StruckDuck" width="243" height="36"></a>
   <nav class="site-nav" aria-label="Main">
     ${FILTERS.map((f) => `<a href="/#${f.hash}" data-filter="${f.key}">${f.label}</a>`).join('\n    ')}
     <a href="#signup" class="btn btn-primary btn-small">Get new tools</a>
@@ -65,7 +65,7 @@ function header() {
 function menu() {
   return `<div class="menu" id="menu" hidden>
   <div class="menu-top">
-    <a href="/" class="brand"><img src="/img/wordmark.png" alt="StruckDuck" width="243" height="36"></a>
+    <a href="/" class="brand" aria-label="StruckDuck home"><img class="brand-foot" src="/img/foot-logo.png" alt="" width="36" height="56"><img src="/img/wordmark.png" alt="StruckDuck" width="243" height="36"></a>
     <button class="menu-close" type="button" aria-label="Close menu" data-menu-close>
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"></path></svg>
     </button>
@@ -134,9 +134,9 @@ export function renderHome(listings, site) {
   <div class="hero-inner">
     <div class="hero-text">
       <h1 class="serif">Tools, tricks,<br>and amusements<br>for magicians.</h1>
-      <p class="hero-sub serif">Personal projects I'm sharing<br>at little to no cost.</p>
+      <p class="hero-sub serif">My personal projects made<br>public for little to no cost.</p>
     </div>
-    <img class="hero-foot" src="/img/foot.png" alt="A duck foot with a thin curl of smoke rising from the top" width="309" height="475">
+    <img class="hero-art" src="/img/hero.webp" alt="A hand holding a wooden impossible triangle" width="317" height="475">
   </div>
   <a class="scroll-cue" href="#shelf">Scroll<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
 </section>
