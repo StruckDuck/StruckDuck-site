@@ -8,7 +8,9 @@ const YT_ID = /^[\w-]{6,20}$/;
 const isYoutube = (m) => m && m.kind === 'youtube' && YT_ID.test(m.id || '');
 const ytThumb = (id) => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
 const thumbSrc = (m) => (isYoutube(m) ? ytThumb(m.id) : m.src);
-const validMedia = (l) => (l.media || []).filter((m) => (m.kind === 'image' && m.src) || isYoutube(m));
+const validMedia = (l) => (l.media || []).filter((m) => (m.kind === 'image' && /^(\/|https:\/\/)/.test(m.src || '')) || isYoutube(m));
+// Links only go to http(s), same-site paths, or in-page anchors.
+const safeUrl = (u) => (/^(https?:\/\/|\/|#)/i.test(String(u || '')) ? String(u) : '#');
 
 export const isPrint = (l) => /print/i.test(l.format || '');
 export const tagText = (l) => `${l.type} · ${l.format}`.toUpperCase();
@@ -116,7 +118,7 @@ function cardCover(l) {
 }
 
 function card(l) {
-  return `<a class="card" href="/${esc(l.slug)}/" data-type="${esc(filterKey(l))}">
+  return `<a class="card" href="/${esc(l.slug)}" data-type="${esc(filterKey(l))}">
       ${cardCover(l)}
       <h2>${esc(l.title)}</h2>
       <p>${esc(l.descriptor)}</p>
@@ -125,7 +127,7 @@ function card(l) {
 }
 
 export function renderHome(listings, site) {
-  const cults = site.cultsUrl || '#';
+  const cults = safeUrl(site.cultsUrl);
   const body = `${menu()}
 <section class="hero" id="top">
   ${header()}
@@ -189,8 +191,8 @@ function ytFacade(id, label) {
 }
 
 export function renderListing(l, site) {
-  const cults = site.cultsUrl || '#';
-  const buttonUrl = l.buttonUrl || '#';
+  const cults = safeUrl(site.cultsUrl);
+  const buttonUrl = safeUrl(l.buttonUrl);
   const external = /^https?:/i.test(buttonUrl);
   const about = (l.description || []).length
     ? `<section class="about">
