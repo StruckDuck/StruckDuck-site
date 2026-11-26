@@ -16,8 +16,10 @@ const SRC = /^\/img\/u\/([a-f0-9]{32}\.(?:jpg|png|gif|webp))$/;
 export const newKey = (ext) => crypto.randomUUID().replace(/-/g, '') + '.' + ext;
 
 // Which media items are files we stored (as opposed to links to other sites)
-export const uploadedKeys = (media) =>
-  (media || []).map((m) => (m.kind === 'image' ? (SRC.exec(m.src || '') || [])[1] : null)).filter(Boolean);
+// Includes the uncropped original kept for re-cropping.
+export const uploadedKeys = (media) => [...new Set(
+  (media || []).flatMap((m) => (m.kind === 'image' ? [m.src, m.original] : []))
+    .map((u) => (SRC.exec(u || '') || [])[1]).filter(Boolean))];
 
 export async function deleteUploads(env, keys) {
   if (!env.IMAGES || !keys.length) return;

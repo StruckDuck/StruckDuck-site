@@ -120,7 +120,18 @@ export function readForm(form, { existing, intent }) {
     try {
       const m = JSON.parse(String(raw));
       if (m.kind === 'youtube' && YT_ID.test(m.id || '')) media.push({ kind: 'youtube', id: m.id, alt: String(m.alt || '') });
-      else if (m.kind === 'image' && okImage(m.src || '')) media.push({ kind: 'image', src: m.src, alt: String(m.alt || '') });
+      else if (m.kind === 'image' && okImage(m.src || '')) {
+        const item = { kind: 'image', src: m.src, alt: String(m.alt || '') };
+        // A cropped image keeps its uncropped original and the crop box, so it can be re-cropped later.
+        if (m.original && okImage(m.original) && m.original !== m.src) {
+          item.original = m.original;
+          const c = m.crop;
+          if (c && [c.x, c.y, c.w, c.h].every((n) => typeof n === 'number' && n >= 0 && n <= 1) && c.w > 0.01 && c.h > 0.01) {
+            item.crop = { x: c.x, y: c.y, w: c.w, h: c.h, r: ['free', 'wide', 'card'].includes(c.r) ? c.r : 'free' };
+          }
+        }
+        media.push(item);
+      }
     } catch { /* skip */ }
   }
   for (const line of get('addYoutube').split(/\r?\n/).map((x) => x.trim()).filter(Boolean)) {
