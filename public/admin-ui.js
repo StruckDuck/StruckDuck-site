@@ -113,6 +113,36 @@
       });
     };
 
+    // Hero photos page: each photo gets a dropdown for the product it opens.
+    var linkOpts = null;
+    try { linkOpts = media.hasAttribute('data-links') ? JSON.parse(media.getAttribute('data-links')) : null; } catch (e) { linkOpts = null; }
+    var addLink = function (item) {
+      if (!linkOpts || item.querySelector('select')) return;
+      var cb = item.querySelector('input[name=keep]');
+      var d;
+      try { d = JSON.parse(cb.value); } catch (e) { return; }
+      var sel = document.createElement('select');
+      sel.setAttribute('aria-label', 'Opens this product when clicked');
+      var none = document.createElement('option');
+      none.value = ''; none.textContent = 'No link';
+      sel.appendChild(none);
+      linkOpts.forEach(function (p) {
+        var o = document.createElement('option');
+        o.value = p[0]; o.textContent = p[1];
+        sel.appendChild(o);
+      });
+      sel.value = d.link || '';
+      if (sel.selectedIndex < 0) sel.value = '';
+      sel.addEventListener('change', function () {
+        var x;
+        try { x = JSON.parse(cb.value); } catch (e) { return; }
+        if (sel.value) x.link = sel.value; else delete x.link;
+        cb.value = JSON.stringify(x);
+      });
+      item.appendChild(sel);
+    };
+    [].slice.call(media.querySelectorAll('.mi')).forEach(addLink);
+
     var addItem = function (src) {
       var d = document.createElement('div');
       d.className = 'mi';
@@ -138,6 +168,7 @@
       }
       d.appendChild(img); d.appendChild(cover); d.appendChild(mv); d.appendChild(bar);
       media.appendChild(d);
+      addLink(d);
       if (emptyHint) emptyHint.hidden = true;
     };
 

@@ -65,7 +65,7 @@ input::placeholder,textarea::placeholder{color:#8FB4BA}
 .sec h2{font-family:'Bree Serif',Georgia,serif;font-size:24px;font-weight:400}
 .f{display:flex;flex-direction:column;gap:7px}
 .f label,.f .lab{font-size:13px;font-weight:600;letter-spacing:.04em;color:var(--soft)}
-.f input[type=text],.f input[type=url],.f textarea{width:100%;background:var(--bg2);border:1px solid rgba(255,255,255,.28);border-radius:8px;padding:12px 14px;color:#fff;font:inherit;font-size:16px}
+.f input[type=text],.f input[type=number],.f input[type=url],.f textarea{width:100%;background:var(--bg2);border:1px solid rgba(255,255,255,.28);border-radius:8px;padding:12px 14px;color:#fff;font:inherit;font-size:16px}
 .f textarea{resize:vertical;line-height:1.5}
 .f input[readonly]{opacity:.7}
 .hint{font-size:13px;color:var(--soft)}
@@ -87,6 +87,10 @@ input::placeholder,textarea::placeholder{color:#8FB4BA}
 .cover-tag{display:none;position:absolute;top:6px;left:6px;background:var(--orange);color:var(--ink);font-size:11px;font-weight:700;letter-spacing:.08em;padding:2px 6px;border-radius:4px}
 .media .mi:first-child .cover-tag{display:block}
 .media.hero .mi .cover-tag{display:none!important}
+.media.hero .mi{width:176px;height:130px}
+.media.hero .mi img{height:92px}
+.media.hero .mbar{bottom:38px}
+.media.hero .mi select{position:absolute;left:6px;right:6px;bottom:6px;width:calc(100% - 12px);height:28px;font-size:13px;background:var(--bg2);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:0 6px}
 .mi .yt{left:auto;right:6px}
 .mv{position:absolute;right:6px;top:6px;display:flex;gap:4px}
 .mi .yt+.mv{top:28px}

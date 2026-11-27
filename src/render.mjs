@@ -139,6 +139,7 @@ function card(l) {
       <h2>${esc(l.title)}</h2>
       <p>${esc(l.descriptor)}</p>
       <div class="price">${esc(l.price)}</div>
+      <span class="card-tag" aria-hidden="true">${esc(tagText(l))}</span>
     </a>`;
 }
 
@@ -150,8 +151,16 @@ function introHtml(text) {
 </section>`;
 }
 
-function heroPhotosHtml(photos) {
-  const slides = photos.map((p, i) => `<img class="slide${i === 0 ? ' on' : ''}" src="${esc(p.src)}" alt="" width="1600" height="900"${i === 0 ? ' fetchpriority="high"' : ' loading="lazy"'}>`).join('\n      ');
+function heroPhotosHtml(photos, seconds, listings) {
+  const byslug = new Map(listings.map((l) => [l.slug, l]));
+  const slides = photos.map((p, i) => {
+    const img = `<img src="${esc(p.src)}" alt="" width="1600" height="900"${i === 0 ? ' fetchpriority="high"' : ' loading="lazy"'}>`;
+    const l = byslug.get(p.link);
+    const cls = `slide${i === 0 ? ' on' : ''}`;
+    return l
+      ? `<a class="${cls}" href="/${esc(l.slug)}" aria-label="${esc(l.title)}">${img}</a>`
+      : `<div class="${cls}">${img}</div>`;
+  }).join('\n      ');
   const dots = photos.length > 1
     ? `<div class="dots">${photos.map((_, i) => `<button type="button" data-dot="${i}" class="${i === 0 ? 'on' : ''}" aria-label="Show photo ${i + 1}"></button>`).join('')}</div>`
     : '';
@@ -159,7 +168,7 @@ function heroPhotosHtml(photos) {
   ${header()}
   <h1 class="sr-only">Tools, tricks, and amusements for magicians.</h1>
   <div class="stage-wrap">
-    <div class="stage" data-rotator>
+    <div class="stage" data-rotator data-seconds="${Number(seconds) || 5}">
       ${slides}
       ${dots}
     </div>
@@ -167,11 +176,11 @@ function heroPhotosHtml(photos) {
 </section>`;
 }
 
-export function renderHome(listings, site, intro = '', heroPhotos = []) {
+export function renderHome(listings, site, intro = '', heroPhotos = [], heroSeconds = 5) {
   const cults = safeUrl(site.cultsUrl);
   const formats = formatPills(listings);
   const body = `${menu()}
-${heroPhotos.length ? heroPhotosHtml(heroPhotos) : `<section class="hero" id="top">
+${heroPhotos.length ? heroPhotosHtml(heroPhotos, heroSeconds, listings) : `<section class="hero" id="top">
   ${header()}
   <div class="hero-inner">
     <div class="hero-text">

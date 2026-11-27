@@ -109,6 +109,7 @@
     var slides = [].slice.call(rot.querySelectorAll('.slide'));
     var dots = [].slice.call(rot.querySelectorAll('[data-dot]'));
     var idx = 0, timer = null, held = false;
+    var secs = Math.min(60, Math.max(2, Number(rot.getAttribute('data-seconds')) || 5));
     var show = function (n) {
       idx = (n + slides.length) % slides.length;
       slides.forEach(function (sl, i) { sl.classList.toggle('on', i === idx); });
@@ -119,7 +120,7 @@
     var start = function () {
       stop();
       if (slides.length < 2 || reduce || held || document.hidden) return;
-      timer = setInterval(function () { show(idx + 1); }, 5000);
+      timer = setInterval(function () { show(idx + 1); }, secs * 1000);
     };
     dots.forEach(function (d) {
       d.addEventListener('click', function () { show(Number(d.getAttribute('data-dot'))); start(); });
