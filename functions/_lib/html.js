@@ -23,7 +23,7 @@ export function adminPage(title, body, status = 200, extra = {}) {
 
 // Full admin page with the header
 export function shell(title, body, { active = '', status = 200 } = {}) {
-  const nav = `<nav class="a-nav"><a href="/admin"${active === 'list' ? ' class="on"' : ''}>All listings</a>
+  const nav = `<nav class="a-nav"><a href="/admin"${active === 'list' ? ' class="on"' : ''}>All listings</a><a href="/admin/intro"${active === 'intro' ? ' class="on"' : ''}>Intro text</a><a href="/admin/hero"${active === 'hero' ? ' class="on"' : ''}>Hero photos</a>
 <form method="post" action="/admin/logout"><button class="linkbtn" type="submit">Sign out</button></form></nav>`;
   return respond(`<!doctype html><html lang="en"><head>${HEAD(title)}</head><body>
 <div class="admin">

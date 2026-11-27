@@ -15,6 +15,22 @@ const safeUrl = (u) => (/^(https?:\/\/|\/|#)/i.test(String(u || '')) ? String(u)
 export const isPrint = (l) => /print/i.test(l.format || '');
 export const tagText = (l) => `${l.type} · ${l.format}`.toUpperCase();
 const filterKey = (l) => String(l.type || '').toLowerCase();
+const slug = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+const formatKey = (l) => slug(l.format);
+const plural = (s) => (/s$/i.test(s) ? s : s + 's');
+
+// One pill per format in use: App and 3D print first, anything custom after.
+function formatPills(listings) {
+  const seen = new Map();
+  for (const l of listings) {
+    const f = String(l.format || '').trim();
+    if (f && !seen.has(slug(f))) seen.set(slug(f), f);
+  }
+  const rank = (k) => (k === 'app' ? 0 : k === '3d-print' ? 1 : 2);
+  return [...seen.entries()]
+    .sort((a, b) => rank(a[0]) - rank(b[0]))
+    .map(([key, f]) => ({ key, label: plural(f), hash: slug(plural(f)) }));
+}
 
 const chevron =
   '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F28A30" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>';
@@ -118,7 +134,7 @@ function cardCover(l) {
 }
 
 function card(l) {
-  return `<a class="card" href="/${esc(l.slug)}" data-type="${esc(filterKey(l))}">
+  return `<a class="card" href="/${esc(l.slug)}" data-type="${esc(filterKey(l))}" data-format="${esc(formatKey(l))}">
       ${cardCover(l)}
       <h2>${esc(l.title)}</h2>
       <p>${esc(l.descriptor)}</p>
@@ -126,10 +142,36 @@ function card(l) {
     </a>`;
 }
 
-export function renderHome(listings, site) {
+function introHtml(text) {
+  const paras = String(text || '').split(/\n\s*\n/).map((t) => t.trim()).filter(Boolean);
+  if (!paras.length) return '';
+  return `<section class="wrap intro" aria-label="About StruckDuck">
+  ${paras.map((t) => `<p>${esc(t).replace(/\n/g, '<br>')}</p>`).join('\n  ')}
+</section>`;
+}
+
+function heroPhotosHtml(photos) {
+  const slides = photos.map((p, i) => `<img class="slide${i === 0 ? ' on' : ''}" src="${esc(p.src)}" alt="" width="1600" height="900"${i === 0 ? ' fetchpriority="high"' : ' loading="lazy"'}>`).join('\n      ');
+  const dots = photos.length > 1
+    ? `<div class="dots">${photos.map((_, i) => `<button type="button" data-dot="${i}" class="${i === 0 ? 'on' : ''}" aria-label="Show photo ${i + 1}"></button>`).join('')}</div>`
+    : '';
+  return `<section class="hero hero-photos" id="top">
+  ${header()}
+  <h1 class="sr-only">Tools, tricks, and amusements for magicians.</h1>
+  <div class="stage-wrap">
+    <div class="stage" data-rotator>
+      ${slides}
+      ${dots}
+    </div>
+  </div>
+</section>`;
+}
+
+export function renderHome(listings, site, intro = '', heroPhotos = []) {
   const cults = safeUrl(site.cultsUrl);
+  const formats = formatPills(listings);
   const body = `${menu()}
-<section class="hero" id="top">
+${heroPhotos.length ? heroPhotosHtml(heroPhotos) : `<section class="hero" id="top">
   ${header()}
   <div class="hero-inner">
     <div class="hero-text">
@@ -138,15 +180,19 @@ export function renderHome(listings, site) {
     <img class="hero-art" src="/img/hero.webp" alt="A hand holding a wooden impossible triangle" width="317" height="475">
   </div>
   <a class="scroll-cue" href="#shelf">Scroll<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
-</section>
+</section>`}
+${introHtml(intro)}
 <main class="wrap shelf" id="shelf">
   <div class="filters scroll-x" role="group" aria-label="Filter projects">
-    <a href="/#all" class="pill active" data-filter="all" aria-pressed="true">All</a>
-    ${FILTERS.map((f) => `<a href="/#${f.hash}" class="pill" data-filter="${f.key}" aria-pressed="false">${f.label}</a>`).join('\n    ')}
+    <a href="/#all" class="pill active" data-group="all" aria-pressed="true">All</a>
+    ${FILTERS.map((f) => `<a href="/#${f.hash}" class="pill" data-group="type" data-key="${f.key}" data-hash="${f.hash}" aria-pressed="false">${f.label}</a>`).join('\n    ')}
+    ${formats.length ? '<span class="pill-sep" aria-hidden="true"></span>' : ''}
+    ${formats.map((f) => `<a href="/#${esc(f.hash)}" class="pill" data-group="format" data-key="${esc(f.key)}" data-hash="${esc(f.hash)}" aria-pressed="false">${esc(f.label)}</a>`).join('\n    ')}
   </div>
   <div class="grid">
     ${listings.map(card).join('\n    ')}
   </div>
+  <p class="empty" data-empty hidden>Nothing here yet.</p>
   <p class="cults-link"><a href="${esc(cults)}" rel="noopener">See everything on Cults3D</a></p>
 </main>
 ${signup('big')}`;

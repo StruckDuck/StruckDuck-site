@@ -222,7 +222,7 @@
           W = Math.round(natW * k); H = Math.round(natH * k);
           stage.style.width = W + 'px'; stage.style.height = H + 'px';
           var c = data.crop;
-          ratioKey = c && RATIOS.hasOwnProperty(c.r) ? c.r : (item === media.firstElementChild ? 'card' : 'wide');
+          ratioKey = c && RATIOS.hasOwnProperty(c.r) ? c.r : (item === media.firstElementChild && !media.hasAttribute('data-hero') ? 'card' : 'wide');
           ratioBtns.forEach(function (b) { b.classList.toggle('on', b.dataset.ratio === ratioKey); });
           if (c) rect = { x: c.x * W, y: c.y * H, w: c.w * W, h: c.h * H };
           else { rect = { x: W * 0.05, y: H * 0.05, w: W * 0.9, h: H * 0.9 }; fitRatio(); }
